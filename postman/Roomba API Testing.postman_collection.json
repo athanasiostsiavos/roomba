@@ -1,0 +1,156 @@
+{
+	"info": {
+		"_postman_id": "2d817b93-7f5e-4b99-894d-6fdbffa6fdab",
+		"name": "Roomba API Testing",
+		"description": "Collection to test the Roomba API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39149173"
+	},
+	"item": [
+		{
+			"name": "Navigate Roomba",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        1,\n        2\n    ],\n    \"patches\": [\n        [\n            1,\n            0\n        ],\n        [\n            2,\n            2\n        ],\n        [\n            2,\n            3\n        ]\n    ],\n    \"instructions\": \"NNESEESWNWW\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/roomba/navigate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roomba",
+						"navigate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Navigate Roomba - Out of Bounds (West)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        0,\n        0\n    ],\n    \"patches\": [\n        [\n            1,\n            0\n        ],\n        [\n            2,\n            2\n        ],\n        [\n            2,\n            3\n        ]\n    ],\n    \"instructions\": \"WWWW\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/roomba/navigate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roomba",
+						"navigate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Navigate Roomba - Out of Bounds (North)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        2,\n        4\n    ],\n    \"patches\": [\n        [\n            1,\n            0\n        ],\n        [\n            2,\n            2\n        ],\n        [\n            2,\n            3\n        ]\n    ],\n    \"instructions\": \"NNNN\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/roomba/navigate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roomba",
+						"navigate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Navigate Roomba - Patches on Borders",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        0,\n        0\n    ],\n    \"patches\": [\n        [\n            0,\n            0\n        ],\n        [\n            4,\n            4\n        ],\n        [\n            4,\n            0\n        ],\n        [\n            0,\n            4\n        ]\n    ],\n    \"instructions\": \"NESEWNWN\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/roomba/navigate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roomba",
+						"navigate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Navigate Roomba - No Dirt Patches",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        1,\n        1\n    ],\n    \"patches\": [],\n    \"instructions\": \"NNEESSWW\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/roomba/navigate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"roomba",
+						"navigate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
