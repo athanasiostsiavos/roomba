@@ -21,13 +21,14 @@ The service outputs the final coordinates of the hoover and the number of patche
 
 ### 1. Clone the repository
 
-Clone the project repository to your local machine using Git:
+Clone the project repository to your local machine using Git and run it quickly:
 
 ```bash
 git clone https://github.com/athanasiostsiavos/roomba.git
 cd roomba
+mvn spring-boot:run
 ```
-
+or you can build it 
 ### 2. Build the project
 
 You will build the project using Maven.
