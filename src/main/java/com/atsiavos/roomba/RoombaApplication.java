@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class RoombaApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RoombaApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(RoombaApplication.class, args);
+  }
 }

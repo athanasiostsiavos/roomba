@@ -1,48 +1,48 @@
 package com.atsiavos.roomba.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.atsiavos.roomba.model.Patch;
 import com.atsiavos.roomba.model.RoombaRequest;
 import com.atsiavos.roomba.model.RoombaResponse;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
-public class RoombaServiceTest {
+class RoombaServiceTest {
 
-    @Test
-    public void testNavigate_ValidMovement() {
+  @Test
+  void testNavigate_ValidMovement() {
 
-        RoombaService roombaService = new RoombaService();
-        RoombaRequest request = new RoombaRequest(
-                List.of(5, 5),   // roomSize
-                List.of(1, 2),   // initial coordinates
-                List.of(List.of(1, 0), List.of(2, 2), List.of(2, 3)), // list of patches
-                "NNESEESWNWW" // instructions
-        );
+    RoombaService roombaService = new RoombaService();
+    RoombaRequest request =
+        new RoombaRequest(
+            List.of(5, 5), // roomSize
+            List.of(1, 2), // initial coordinates
+            List.of(new Patch(1, 0), new Patch(2, 2), new Patch(2, 3)), // list of patches
+            "NNESEESWNWW" // instructions
+            );
 
+    RoombaResponse response = roombaService.navigate(request);
 
-        RoombaResponse response = roombaService.navigate(request);
+    assertEquals(List.of(1, 3), response.coords()); // Final coordinates
+    assertEquals(1, response.patches()); // Patches cleaned
+  }
 
+  @Test
+  void testNavigate_OutOfBounds() {
 
-        assertEquals(List.of(1, 3), response.getCoords());  // Final coordinates
-        assertEquals(1, response.getPatches());  // Patches cleaned
-    }
+    RoombaService roombaService = new RoombaService();
+    RoombaRequest request =
+        new RoombaRequest(
+            List.of(5, 5),
+            List.of(1, 1),
+            List.of(), // No dirt patches
+            "NNNNN" // Out of bounds
+            );
 
-    @Test
-    public void testNavigate_OutOfBounds() {
+    IllegalArgumentException thrown =
+        assertThrows(IllegalArgumentException.class, () -> roombaService.navigate(request));
 
-        RoombaService roombaService = new RoombaService();
-        RoombaRequest request = new RoombaRequest(
-                List.of(5, 5),
-                List.of(1, 1),
-                List.of(),  // No dirt patches
-                "NNNNN" // Out of bounds
-        );
-
-
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            roombaService.navigate(request);
-        });
-
-        assertEquals("Out of bounds position: (1, 5)", thrown.getMessage());
-    }
+    assertEquals("Out of bounds position: (1, 5)", thrown.getMessage());
+  }
 }

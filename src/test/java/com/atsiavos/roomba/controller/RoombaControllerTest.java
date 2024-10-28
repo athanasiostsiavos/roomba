@@ -1,9 +1,9 @@
 package com.atsiavos.roomba.controller;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import com.atsiavos.roomba.model.Patch;
 import com.atsiavos.roomba.model.RoombaRequest;
 import com.atsiavos.roomba.model.RoombaResponse;
 import com.atsiavos.roomba.service.RoombaService;
@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(RoombaController.class)
-public class RoombaControllerTest {
+class RoombaControllerTest {
 
   @Autowired private MockMvc mockMvc;
 
@@ -31,34 +31,39 @@ public class RoombaControllerTest {
 
   @BeforeEach
   public void setup() {
-
-    request =
-        new RoombaRequest(
-            List.of(5, 5), // roomSize
-            List.of(1, 2), // initial coords
-            List.of(List.of(1, 0), List.of(2, 2), List.of(2, 3)), // patches
-            "NNESEESWNWW" // instructions
-            );
-
+    // Set up a general response object
     response =
         new RoombaResponse(
             List.of(1, 3), // final coords
             1 // number of patches cleaned
             );
-
-    Mockito.when(roombaService.navigate(any(RoombaRequest.class))).thenReturn(response);
   }
 
   @Test
-  public void testNavigateHoover() throws Exception {
+  void testNavigateHoover() throws Exception {
+    request =
+        new RoombaRequest(
+            List.of(5, 5), // roomSize
+            List.of(1, 2), // initial coords
+            List.of(new Patch(1, 0), new Patch(2, 2), new Patch(2, 3)), // patches
+            "NNESEESWNWW" // instructions
+            );
+
+    Mockito.when(roombaService.navigate(request)).thenReturn(response);
 
     String jsonRequest =
-        "{\n"
-            + "\"roomSize\": [5, 5],\n"
-            + "\"coords\": [1, 2],\n"
-            + "\"patches\": [[1, 0], [2, 2], [2, 3]],\n"
-            + "\"instructions\": \"NNESEESWNWW\"\n"
-            + "}";
+        """
+        {
+            "roomSize": [5, 5],
+            "coords": [1, 2],
+            "patches": [
+                {"x": 1, "y": 0},
+                {"x": 2, "y": 2},
+                {"x": 2, "y": 3}
+            ],
+            "instructions": "NNESEESWNWW"
+        }
+        """;
 
     mockMvc
         .perform(
@@ -72,74 +77,101 @@ public class RoombaControllerTest {
   }
 
   @Test
-  public void testOutOfBoundsWest() throws Exception {
-
-    Mockito.when(roombaService.navigate(any(RoombaRequest.class)))
-        .thenThrow(new IllegalArgumentException("Out of bounds position"));
-
-    String jsonRequest =
-        "{\n"
-            + "\"roomSize\": [5, 5],\n"
-            + "\"coords\": [0, 0],\n"
-            + "\"patches\": [[1, 0], [2, 2], [2, 3]],\n"
-            + "\"instructions\": \"WWWW\"\n"
-            + "}";
-
-    mockMvc
-        .perform(
-            MockMvcRequestBuilders.post("/roomba/navigate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequest))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-        .andExpect(jsonPath("$.error", is("Out of bounds position")));
-  }
-
-  // Out of bounds to the North
-  @Test
-  public void testOutOfBoundsNorth() throws Exception {
-
-    Mockito.when(roombaService.navigate(any(RoombaRequest.class)))
-        .thenThrow(new IllegalArgumentException("Out of bounds position"));
-
-    String jsonRequest =
-        "{\n"
-            + "\"roomSize\": [5, 5],\n"
-            + "\"coords\": [2, 4],\n"
-            + "\"patches\": [[1, 0], [2, 2], [2, 3]],\n"
-            + "\"instructions\": \"NNNN\"\n"
-            + "}";
-
-    mockMvc
-        .perform(
-            MockMvcRequestBuilders.post("/roomba/navigate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequest))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-        .andExpect(jsonPath("$.error", is("Out of bounds position")));
-  }
-
-  // Room borders
-  @Test
-  public void testPatchesOnBorders() throws Exception {
-
+  void testOutOfBoundsWest() throws Exception {
     request =
         new RoombaRequest(
             List.of(5, 5),
             List.of(0, 0),
-            List.of(List.of(0, 0), List.of(4, 4), List.of(4, 0), List.of(0, 4)),
+            List.of(new Patch(1, 0), new Patch(2, 2), new Patch(2, 3)),
+            "WWWW");
+
+    Mockito.when(roombaService.navigate(request))
+        .thenThrow(new IllegalArgumentException("Out of bounds position"));
+
+    String jsonRequest =
+        """
+        {
+            "roomSize": [5, 5],
+            "coords": [0, 0],
+            "patches": [
+                {"x": 1, "y": 0},
+                {"x": 2, "y": 2},
+                {"x": 2, "y": 3}
+            ],
+            "instructions": "WWWW"
+        }
+        """;
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/roomba/navigate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(jsonPath("$.error", is("Out of bounds position")));
+  }
+
+  @Test
+  void testOutOfBoundsNorth() throws Exception {
+    request =
+        new RoombaRequest(
+            List.of(5, 5),
+            List.of(2, 4),
+            List.of(new Patch(1, 0), new Patch(2, 2), new Patch(2, 3)),
+            "NNNN");
+
+    Mockito.when(roombaService.navigate(request))
+        .thenThrow(new IllegalArgumentException("Out of bounds position"));
+
+    String jsonRequest =
+        """
+        {
+            "roomSize": [5, 5],
+            "coords": [2, 4],
+            "patches": [
+                {"x": 1, "y": 0},
+                {"x": 2, "y": 2},
+                {"x": 2, "y": 3}
+            ],
+            "instructions": "NNNN"
+        }
+        """;
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/roomba/navigate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(jsonPath("$.error", is("Out of bounds position")));
+  }
+
+  @Test
+  void testPatchesOnBorders() throws Exception {
+    request =
+        new RoombaRequest(
+            List.of(5, 5),
+            List.of(0, 0),
+            List.of(new Patch(0, 0), new Patch(4, 4), new Patch(4, 0), new Patch(0, 4)),
             "NESEWNWN");
 
     response = new RoombaResponse(List.of(1, 1), 4);
-
-    Mockito.when(roombaService.navigate(any(RoombaRequest.class))).thenReturn(response);
+    Mockito.when(roombaService.navigate(request)).thenReturn(response);
 
     String jsonRequest =
-        "{\n"
-            + "\"roomSize\": [5, 5],\n"
-            + "\"coords\": [0, 0],\n"
-            + "\"patches\": [[0, 0], [4, 4], [4, 0], [0, 4]],\n"
-            + "\"instructions\": \"NESEWNWN\"\n"
-            + "}";
+        """
+        {
+            "roomSize": [5, 5],
+            "coords": [0, 0],
+            "patches": [
+                {"x": 0, "y": 0},
+                {"x": 4, "y": 4},
+                {"x": 4, "y": 0},
+                {"x": 0, "y": 4}
+            ],
+            "instructions": "NESEWNWN"
+        }
+        """;
 
     mockMvc
         .perform(
@@ -153,8 +185,7 @@ public class RoombaControllerTest {
   }
 
   @Test
-  public void testNoDirtPatches() throws Exception {
-    // mock request and response for no dirt patches
+  void testNoDirtPatches() throws Exception {
     request = new RoombaRequest(List.of(5, 5), List.of(1, 1), List.of(), "NNEESSWW");
 
     response =
@@ -163,15 +194,17 @@ public class RoombaControllerTest {
             0 // 0 patches cleaned
             );
 
-    Mockito.when(roombaService.navigate(any(RoombaRequest.class))).thenReturn(response);
+    Mockito.when(roombaService.navigate(request)).thenReturn(response);
 
     String jsonRequest =
-        "{\n"
-            + "\"roomSize\": [5, 5],\n"
-            + "\"coords\": [1, 1],\n"
-            + "\"patches\": [],\n"
-            + "\"instructions\": \"NNEESSWW\"\n"
-            + "}";
+        """
+        {
+            "roomSize": [5, 5],
+            "coords": [1, 1],
+            "patches": [],
+            "instructions": "NNEESSWW"
+        }
+        """;
 
     mockMvc
         .perform(

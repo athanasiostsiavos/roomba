@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        1,\n        2\n    ],\n    \"patches\": [\n        [\n            1,\n            0\n        ],\n        [\n            2,\n            2\n        ],\n        [\n            2,\n            3\n        ]\n    ],\n    \"instructions\": \"NNESEESWNWW\"\n}"
+					"raw": "{\n    \"roomSize\": [5, 5],\n    \"coords\": [1, 2],\n    \"patches\": [\n        {\"x\": 1, \"y\": 0},\n        {\"x\": 2, \"y\": 2},\n        {\"x\": 2, \"y\": 3}\n    ],\n    \"instructions\": \"NNESEESWNWW\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/roomba/navigate",
@@ -48,7 +48,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        0,\n        0\n    ],\n    \"patches\": [\n        [\n            1,\n            0\n        ],\n        [\n            2,\n            2\n        ],\n        [\n            2,\n            3\n        ]\n    ],\n    \"instructions\": \"WWWW\"\n}"
+					"raw": "{\n    \"roomSize\": [5, 5],\n    \"coords\": [0, 0],\n    \"patches\": [\n        {\"x\": 1, \"y\": 0},\n        {\"x\": 2, \"y\": 2},\n        {\"x\": 2, \"y\": 3}\n    ],\n    \"instructions\": \"WWWW\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/roomba/navigate",
@@ -77,7 +77,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        2,\n        4\n    ],\n    \"patches\": [\n        [\n            1,\n            0\n        ],\n        [\n            2,\n            2\n        ],\n        [\n            2,\n            3\n        ]\n    ],\n    \"instructions\": \"NNNN\"\n}"
+					"raw": "{\n    \"roomSize\": [5, 5],\n    \"coords\": [2, 4],\n    \"patches\": [\n        {\"x\": 1, \"y\": 0},\n        {\"x\": 2, \"y\": 2},\n        {\"x\": 2, \"y\": 3}\n    ],\n    \"instructions\": \"NNNN\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/roomba/navigate",
@@ -106,7 +106,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        0,\n        0\n    ],\n    \"patches\": [\n        [\n            0,\n            0\n        ],\n        [\n            4,\n            4\n        ],\n        [\n            4,\n            0\n        ],\n        [\n            0,\n            4\n        ]\n    ],\n    \"instructions\": \"NESEWNWN\"\n}"
+					"raw": "{\n    \"roomSize\": [5, 5],\n    \"coords\": [0, 0],\n    \"patches\": [\n        {\"x\": 0, \"y\": 0},\n        {\"x\": 4, \"y\": 4},\n        {\"x\": 4, \"y\": 0},\n        {\"x\": 0, \"y\": 4}\n    ],\n    \"instructions\": \"NESEWNWN\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/roomba/navigate",
@@ -135,7 +135,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"roomSize\": [\n        5,\n        5\n    ],\n    \"coords\": [\n        1,\n        1\n    ],\n    \"patches\": [],\n    \"instructions\": \"NNEESSWW\"\n}"
+					"raw": "{\n    \"roomSize\": [5, 5],\n    \"coords\": [1, 1],\n    \"patches\": [],\n    \"instructions\": \"NNEESSWW\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/roomba/navigate",
